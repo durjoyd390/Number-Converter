@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/bb740832-5663-46c6-bf64-63ba3da18f19)# Number Converter System
+# Number Converter System
 
 Live: https://durjoyd390.github.io/Number-Converter/
 
