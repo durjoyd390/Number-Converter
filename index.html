@@ -53,7 +53,7 @@
         $('#convertButton').click(function() {
             const inputValue = $('#numberInput').val();
             const base = $('#baseSelect').val();
-        
+            
             $('#inputError').hide();
 
             if (!validateInput(inputValue, base)) {
@@ -73,32 +73,48 @@
         function validateInput(value, base) {
             switch (base) {
                 case 'binary':
-                    return /^[01]+$/.test(value);
+                    return /^[01]+(\.[01]+)?$/.test(value); 
                 case 'decimal':
-                    return /^[0-9]+$/.test(value);
+                    return /^[0-9]+(\.[0-9]+)?$/.test(value); 
                 case 'octal':
-                    return /^[0-7]+$/.test(value);
+                    return /^[0-7]+(\.[0-7]+)?$/.test(value); 
                 case 'hexadecimal':
-                    return /^[0-9a-fA-F]+$/.test(value);
+                    return /^[0-9a-fA-F]+(\.[0-9a-fA-F]+)?$/.test(value); 
                 default:
                     return false;
             }
         }
 
-    
         function convertToDecimal(value, base) {
+            if (!value.includes('.')) {
+                return parseInt(value, getBaseRadix(base));
+            }
+
+            const parts = value.split('.');
+            const integerPart = parseInt(parts[0], getBaseRadix(base));
+            const fractionalPart = parts[1].split('').reduce((acc, digit, index) => {
+                return acc + parseInt(digit, getBaseRadix(base)) / Math.pow(getBaseRadix(base), index + 1);
+            }, 0);
+
+            return integerPart + fractionalPart;
+        }
+
+        function getBaseRadix(base) {
             switch (base) {
                 case 'binary':
-                    return parseInt(value, 2);
+                    return 2;
                 case 'decimal':
-                    return parseInt(value, 10);
+                    return 10;
                 case 'octal':
-                    return parseInt(value, 8);
+                    return 8;
                 case 'hexadecimal':
-                    return parseInt(value, 16);
+                    return 16;
+                default:
+                    return 10;
             }
         }
     });
 </script>
+
 </body>
 </html>
